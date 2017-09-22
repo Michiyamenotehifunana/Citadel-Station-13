@@ -68,3 +68,14 @@
 	attack_verb = list("slapped")
 	resistance_flags = FLAMMABLE
 	var/bitesound = 'sound/items/bikehorn.ogg'
+
+/*bunniboi*/
+
+/obj/item/bedsheet/carrot
+	name = "carrot bedsheet"
+	desc = "It's a carrot bedsheet. Shaped like a carrot."
+	icon = 'icons/obj/custom.dmi'
+	icon_state = "carrotcloak"
+	alternate_worn_icon = 'icons/mob/citadel/neck.dmi'
+	item_state = "carrot"
+	dream_messages = list("orange")
