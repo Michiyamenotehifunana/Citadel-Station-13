@@ -172,7 +172,7 @@ GLOBAL_LIST_INIT(wood_recipes, list ( \
 	novariants = TRUE
 
 /obj/item/stack/sheet/mineral/wood/Initialize(mapload, new_amount, merge = TRUE)
-	recipes = GLOB.wood_recipes
+	recipes = GLOB.wood_recipes |= GLOB.cit_wood_recipes
 	return ..()
 
 /obj/item/stack/sheet/mineral/wood/fifty
