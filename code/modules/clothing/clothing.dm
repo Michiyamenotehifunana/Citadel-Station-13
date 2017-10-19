@@ -147,7 +147,7 @@
 			how_cool_are_your_threads += "[src]'s storage opens when clicked.\n"
 		else
 			how_cool_are_your_threads += "[src]'s storage opens when dragged to yourself.\n"
-		how_cool_are_your_threads += "[src] can store [pockets.storage_slots] item[pockets.storage_slots > 1 ? "s" : ""].\n"
+		how_cool_are_your_threads += "[src] can store [pockets.storage_slots] item\s.\n"
 		how_cool_are_your_threads += "[src] can store items that are [weightclass2text(pockets.max_w_class)] or smaller.\n"
 		if(pockets.quickdraw)
 			how_cool_are_your_threads += "You can quickly remove an item from [src] using Alt-Click.\n"
@@ -592,7 +592,7 @@ BLIND     // can't see anything
 				to_chat(user, "<span class='warning'>[src] already has an accessory.</span>")
 			return
 		else
-			if(user && !user.drop_item())
+			if(user && !user.temporarilyRemoveItemFromInventory(I))
 				return
 			if(!A.attach(src, user))
 				return

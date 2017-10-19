@@ -189,9 +189,8 @@
 		var/obj/item/reagent_containers/food/snacks/S = W
 		if(!S.junkiness)
 			if(!iscompartmentfull(user))
-				if(!user.drop_item())
+				if(!user.transferItemToLoc(W, src))
 					return
-				W.loc = src
 				food_load(W)
 				to_chat(user, "<span class='notice'>You insert [W] into [src]'s chef compartment.</span>")
 		else
@@ -279,9 +278,8 @@
 		if(!premium.len)
 			to_chat(user, "<span class='warning'>[src] doesn't have a coin slot.</span>")
 			return
-		if(!user.drop_item())
+		if(!user.transferItemToLoc(W, src))
 			return
-		W.loc = src
 		coin = W
 		to_chat(user, "<span class='notice'>You insert [W] into [src].</span>")
 		return
@@ -412,16 +410,6 @@
 /obj/machinery/vending/Topic(href, href_list)
 	if(..())
 		return
-
-	if(issilicon(usr))
-		if(iscyborg(usr))
-			var/mob/living/silicon/robot/R = usr
-			if(!(R.module && istype(R.module, /obj/item/robot_module/butler) ))
-				to_chat(usr, "<span class='notice'>The vending machine refuses to interface with you, as you are not in its target demographic!</span>")
-				return
-		else
-			to_chat(usr, "<span class='notice'>The vending machine refuses to interface with you, as you are not in its target demographic!</span>")
-			return
 
 	if(href_list["remove_coin"])
 		if(!(coin || bill))
