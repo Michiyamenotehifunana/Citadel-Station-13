@@ -1,12 +1,12 @@
 /*
-			Citadel's Exclusive suits (Armor vests, space suits, jackets, etc.) go here I guess
+			Citadel's Exclusive armor (Armor vests, space suits, jackets, helmets, etc.) go here I guess
 */
 
 	// Lavaknight Armor
 
 /obj/item/clothing/head/helmet/space/hardsuit/lavaknight
 	name = "cydonian helmet"
-	desc = "A special helmet designed for exploration in a hazardous, low pressure environment. Has reinforced plating for wildlife encounters and fancy lights."
+	desc = "A helmet designed with both form and function in mind, it protects the user against physical trauma and hazardous conditions while also having polychromic light strips."
 	icon = 'icons/obj/clothing/cit_hats.dmi'
 	icon_state = "knight_cydonia"
 	item_state = "knight_yellow"
@@ -41,6 +41,10 @@
 
 	add_overlay(helm_overlay)
 
+	for(var/X in actions)
+		var/datum/action/A = X
+		A.UpdateButtonIcon()
+
 /obj/item/clothing/head/helmet/space/hardsuit/lavaknight/worn_overlays(isinhands, icon_file)
 	. = ..()
 	if(!isinhands)
@@ -52,7 +56,7 @@
 	icon = 'icons/obj/clothing/cit_suits.dmi'
 	icon_state = "knight_cydonia"
 	name = "cydonian armor"
-	desc = "A special suit that protects against hazardous, low pressure environments. Has reinforced plating for wildlife encounters."
+	desc = "A suit designed with both form and function in mind, it protects the user against physical trauma and hazardous conditions while also having polychromic light strips."
 	item_state = "swat_suit"
 	alternate_worn_icon = 'icons/mob/citadel/suit.dmi'
 	max_heat_protection_temperature = FIRE_SUIT_MAX_TEMP_PROTECT
@@ -71,7 +75,7 @@
 	if(helmet)
 		linkedhelm = helmet
 	light_color = energy_color
-	set_light(3)
+	set_light(2)
 
 /obj/item/clothing/suit/space/hardsuit/lavaknight/update_icon()
 	var/mutable_appearance/suit_overlay = mutable_appearance('icons/obj/clothing/cit_suits.dmi', "knight_cydonia_overlay")
@@ -82,6 +86,10 @@
 	cut_overlays()		//So that it doesn't keep stacking overlays non-stop on top of each other
 
 	add_overlay(suit_overlay)
+
+	for(var/X in actions)
+		var/datum/action/A = X
+		A.UpdateButtonIcon()
 
 /obj/item/clothing/suit/space/hardsuit/lavaknight/worn_overlays(isinhands, icon_file)
 	. = ..()
