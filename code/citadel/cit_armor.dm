@@ -32,10 +32,12 @@
 		A.UpdateButtonIcon()
 
 /obj/item/clothing/head/helmet/space/hardsuit/lavaknight/update_icon()
-	var/mutable_appearance/helm_overlay = mutable_appearance('icons/obj/clothing/cit_hats.dmi', "knight_cydonia_overlay")
+	var/mutable_appearance/helm_overlay = mutable_appearance('icons/obj/clothing/cit_hats.dmi', "knight_cydonia_overlay", 500)
 
 	if(energy_color)
 		helm_overlay.color = energy_color
+
+	helm_overlay.plane = 500	//Magic number is used here because we have no ABOVE_LIGHTING_PLANE plane defined. Lighting plane is 15, HUD is 18
 
 	cut_overlays()		//So that it doesn't keep stacking overlays non-stop on top of each other
 
@@ -48,8 +50,9 @@
 /obj/item/clothing/head/helmet/space/hardsuit/lavaknight/worn_overlays(isinhands, icon_file)
 	. = ..()
 	if(!isinhands)
-		var/mutable_appearance/energy_overlay = mutable_appearance(icon_file, "knight_cydonia_overlay")
+		var/mutable_appearance/energy_overlay = mutable_appearance(icon_file, "knight_cydonia_overlay", 500)
 		energy_overlay.color = energy_color
+		energy_overlay.plane = 500
 		. += energy_overlay
 
 /obj/item/clothing/suit/space/hardsuit/lavaknight
@@ -75,13 +78,15 @@
 	if(helmet)
 		linkedhelm = helmet
 	light_color = energy_color
-	set_light(2)
+	set_light(1)
 
 /obj/item/clothing/suit/space/hardsuit/lavaknight/update_icon()
-	var/mutable_appearance/suit_overlay = mutable_appearance('icons/obj/clothing/cit_suits.dmi', "knight_cydonia_overlay")
+	var/mutable_appearance/suit_overlay = mutable_appearance('icons/obj/clothing/cit_suits.dmi', "knight_cydonia_overlay", 500)
 
 	if(energy_color)
 		suit_overlay.color = energy_color
+
+	suit_overlay.plane = 500		//Magic number is used here because we have no ABOVE_LIGHTING_PLANE plane defined. Lighting plane is 15.
 
 	cut_overlays()		//So that it doesn't keep stacking overlays non-stop on top of each other
 
@@ -94,8 +99,9 @@
 /obj/item/clothing/suit/space/hardsuit/lavaknight/worn_overlays(isinhands, icon_file)
 	. = ..()
 	if(!isinhands)
-		var/mutable_appearance/energy_overlay = mutable_appearance(icon_file, "knight_cydonia_overlay")
+		var/mutable_appearance/energy_overlay = mutable_appearance(icon_file, "knight_cydonia_overlay", 500)
 		energy_overlay.color = energy_color
+		energy_overlay.plane = 500
 		. += energy_overlay
 
 /obj/item/clothing/suit/space/hardsuit/lavaknight/ui_action_click(mob/user, var/datum/action/A)
