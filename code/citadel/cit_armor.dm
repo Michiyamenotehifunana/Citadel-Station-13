@@ -32,16 +32,18 @@
 		A.UpdateButtonIcon()
 
 /obj/item/clothing/head/helmet/space/hardsuit/lavaknight/update_icon()
-	var/mutable_appearance/helm_overlay = mutable_appearance('icons/obj/clothing/cit_hats.dmi', "knight_cydonia_overlay", 500)
+	var/mutable_appearance/helm_overlay = mutable_appearance('icons/obj/clothing/cit_hats.dmi', "knight_cydonia_overlay", LIGHTING_LAYER + 1)
 
 	if(energy_color)
 		helm_overlay.color = energy_color
 
-	helm_overlay.plane = 500	//Magic number is used here because we have no ABOVE_LIGHTING_PLANE plane defined. Lighting plane is 15, HUD is 18
+	helm_overlay.plane = LIGHTING_PLANE + 1	//Magic number is used here because we have no ABOVE_LIGHTING_PLANE plane defined. Lighting plane is 15, HUD is 18
 
 	cut_overlays()		//So that it doesn't keep stacking overlays non-stop on top of each other
 
 	add_overlay(helm_overlay)
+
+	emissivelights()
 
 	for(var/X in actions)
 		var/datum/action/A = X
@@ -50,10 +52,17 @@
 /obj/item/clothing/head/helmet/space/hardsuit/lavaknight/worn_overlays(isinhands, icon_file)
 	. = ..()
 	if(!isinhands)
-		var/mutable_appearance/energy_overlay = mutable_appearance(icon_file, "knight_cydonia_overlay", 500)
+		var/mutable_appearance/energy_overlay = mutable_appearance(icon_file, "knight_cydonia_overlay", LIGHTING_LAYER + 1)
 		energy_overlay.color = energy_color
-		energy_overlay.plane = 500
+		energy_overlay.plane = LIGHTING_PLANE + 1
 		. += energy_overlay
+
+/obj/item/clothing/head/helmet/space/hardsuit/lavaknight/proc/emissivelights(mob/user = usr)
+	var/mutable_appearance/energy_overlay = mutable_appearance('icons/mob/citadel/head.dmi', "knight_cydonia_overlay", LIGHTING_LAYER + 1)
+	energy_overlay.color = energy_color
+	energy_overlay.plane = LIGHTING_PLANE + 1
+	user.cut_overlay(energy_overlay)	//honk
+	user.add_overlay(energy_overlay)	//honk
 
 /obj/item/clothing/suit/space/hardsuit/lavaknight
 	icon = 'icons/obj/clothing/cit_suits.dmi'
@@ -81,16 +90,18 @@
 	set_light(1)
 
 /obj/item/clothing/suit/space/hardsuit/lavaknight/update_icon()
-	var/mutable_appearance/suit_overlay = mutable_appearance('icons/obj/clothing/cit_suits.dmi', "knight_cydonia_overlay", 500)
+	var/mutable_appearance/suit_overlay = mutable_appearance('icons/obj/clothing/cit_suits.dmi', "knight_cydonia_overlay", LIGHTING_LAYER + 1)
 
 	if(energy_color)
 		suit_overlay.color = energy_color
 
-	suit_overlay.plane = 500		//Magic number is used here because we have no ABOVE_LIGHTING_PLANE plane defined. Lighting plane is 15.
+	suit_overlay.plane = LIGHTING_PLANE + 1		//Magic number is used here because we have no ABOVE_LIGHTING_PLANE plane defined. Lighting plane is 15.
 
 	cut_overlays()		//So that it doesn't keep stacking overlays non-stop on top of each other
 
 	add_overlay(suit_overlay)
+
+	emissivelights()		//hacky as fuck thing here which I'm not sure is good at all
 
 	for(var/X in actions)
 		var/datum/action/A = X
@@ -99,10 +110,17 @@
 /obj/item/clothing/suit/space/hardsuit/lavaknight/worn_overlays(isinhands, icon_file)
 	. = ..()
 	if(!isinhands)
-		var/mutable_appearance/energy_overlay = mutable_appearance(icon_file, "knight_cydonia_overlay", 500)
+		var/mutable_appearance/energy_overlay = mutable_appearance(icon_file, "knight_cydonia_overlay", LIGHTING_LAYER + 1)
 		energy_overlay.color = energy_color
-		energy_overlay.plane = 500
+		energy_overlay.plane = LIGHTING_PLANE + 1
 		. += energy_overlay
+
+/obj/item/clothing/suit/space/hardsuit/lavaknight/proc/emissivelights(mob/user = usr)
+	var/mutable_appearance/energy_overlay = mutable_appearance('icons/mob/citadel/suit.dmi', "knight_cydonia_overlay", LIGHTING_LAYER + 1)
+	energy_overlay.color = energy_color
+	energy_overlay.plane = LIGHTING_PLANE + 1
+	user.cut_overlay(energy_overlay)	//honk
+	user.add_overlay(energy_overlay)	//honk
 
 /obj/item/clothing/suit/space/hardsuit/lavaknight/ui_action_click(mob/user, var/datum/action/A)
 	if(istype(A, /datum/action/item_action/pick_color))
