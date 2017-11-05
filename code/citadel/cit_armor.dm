@@ -49,13 +49,13 @@
 		var/datum/action/A = X
 		A.UpdateButtonIcon()
 
-/obj/item/clothing/head/helmet/space/hardsuit/lavaknight/worn_overlays(isinhands, icon_file)
-	. = ..()
-	if(!isinhands)
-		var/mutable_appearance/energy_overlay = mutable_appearance(icon_file, "knight_cydonia_overlay", LIGHTING_LAYER + 1)
-		energy_overlay.color = energy_color
-		energy_overlay.plane = LIGHTING_PLANE + 1
-		. += energy_overlay
+/obj/item/clothing/head/helmet/space/hardsuit/lavaknight/equipped(mob/user, slot)
+	..()
+	emissivelights()
+
+/obj/item/clothing/head/helmet/space/hardsuit/lavaknight/dropped(mob/user)
+	..()
+	emissivelightsoff()
 
 /obj/item/clothing/head/helmet/space/hardsuit/lavaknight/proc/emissivelights(mob/user = usr)
 	var/mutable_appearance/energy_overlay = mutable_appearance('icons/mob/citadel/head.dmi', "knight_cydonia_overlay", LIGHTING_LAYER + 1)
@@ -63,6 +63,10 @@
 	energy_overlay.plane = LIGHTING_PLANE + 1
 	user.cut_overlay(energy_overlay)	//honk
 	user.add_overlay(energy_overlay)	//honk
+
+/obj/item/clothing/head/helmet/space/hardsuit/lavaknight/proc/emissivelightsoff(mob/user = usr)
+	user.cut_overlays()
+	user.regenerate_icons()    //honk
 
 /obj/item/clothing/suit/space/hardsuit/lavaknight
 	icon = 'icons/obj/clothing/cit_suits.dmi'
@@ -101,19 +105,18 @@
 
 	add_overlay(suit_overlay)
 
-	emissivelights()		//hacky as fuck thing here which I'm not sure is good at all
-
 	for(var/X in actions)
 		var/datum/action/A = X
 		A.UpdateButtonIcon()
 
-/obj/item/clothing/suit/space/hardsuit/lavaknight/worn_overlays(isinhands, icon_file)
-	. = ..()
-	if(!isinhands)
-		var/mutable_appearance/energy_overlay = mutable_appearance(icon_file, "knight_cydonia_overlay", LIGHTING_LAYER + 1)
-		energy_overlay.color = energy_color
-		energy_overlay.plane = LIGHTING_PLANE + 1
-		. += energy_overlay
+/obj/item/clothing/suit/space/hardsuit/lavaknight/equipped(mob/user, slot)
+	..()
+	if(slot != slot_wear_suit)
+		emissivelights()
+
+/obj/item/clothing/suit/space/hardsuit/lavaknight/dropped(mob/user)
+	..()
+	emissivelightsoff()
 
 /obj/item/clothing/suit/space/hardsuit/lavaknight/proc/emissivelights(mob/user = usr)
 	var/mutable_appearance/energy_overlay = mutable_appearance('icons/mob/citadel/suit.dmi', "knight_cydonia_overlay", LIGHTING_LAYER + 1)
@@ -121,6 +124,10 @@
 	energy_overlay.plane = LIGHTING_PLANE + 1
 	user.cut_overlay(energy_overlay)	//honk
 	user.add_overlay(energy_overlay)	//honk
+
+/obj/item/clothing/suit/space/hardsuit/lavaknight/proc/emissivelightsoff(mob/user = usr)
+	user.cut_overlays()
+	user.regenerate_icons()    //honk
 
 /obj/item/clothing/suit/space/hardsuit/lavaknight/ui_action_click(mob/user, var/datum/action/A)
 	if(istype(A, /datum/action/item_action/pick_color))
@@ -136,6 +143,7 @@
 				update_icon()
 				user.update_inv_wear_suit()
 				light_color = energy_color
+				emissivelights()
 				update_light()
 
 	else
