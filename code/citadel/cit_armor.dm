@@ -45,13 +45,10 @@
 
 	emissivelights()
 
-	for(var/X in actions)
-		var/datum/action/A = X
-		A.UpdateButtonIcon()
-
 /obj/item/clothing/head/helmet/space/hardsuit/lavaknight/equipped(mob/user, slot)
 	..()
-	emissivelights()
+	if(slot = slot_head)
+		emissivelights()
 
 /obj/item/clothing/head/helmet/space/hardsuit/lavaknight/dropped(mob/user)
 	..()
@@ -81,7 +78,7 @@
 	allowed = list(/obj/item/device/flashlight, /obj/item/tank/internals, /obj/item/storage/bag/ore, /obj/item/pickaxe)
 	helmettype = /obj/item/clothing/head/helmet/space/hardsuit/lavaknight
 	heat_protection = CHEST|GROIN|LEGS|FEET|ARMS|HANDS
-	actions_types = list(/datum/action/item_action/toggle_helmet, /datum/action/item_action/pick_color)
+	actions_types = list(/datum/action/item_action/toggle_helmet)
 	var/obj/item/clothing/head/helmet/space/hardsuit/lavaknight/linkedhelm
 
 	var/energy_color = "#35FFF0"
@@ -105,13 +102,9 @@
 
 	add_overlay(suit_overlay)
 
-	for(var/X in actions)
-		var/datum/action/A = X
-		A.UpdateButtonIcon()
-
 /obj/item/clothing/suit/space/hardsuit/lavaknight/equipped(mob/user, slot)
 	..()
-	if(slot != slot_wear_suit)
+	if(slot = slot_wear_suit)
 		emissivelights()
 
 /obj/item/clothing/suit/space/hardsuit/lavaknight/dropped(mob/user)
@@ -129,22 +122,26 @@
 	user.cut_overlays()
 	user.regenerate_icons()    //honk
 
-/obj/item/clothing/suit/space/hardsuit/lavaknight/ui_action_click(mob/user, var/datum/action/A)
-	if(istype(A, /datum/action/item_action/pick_color))
-		if(alert("Are you sure you want to recolor your armor stripes?", "Confirm Repaint", "Yes", "No") == "Yes")
-			var/energy_color_input = input(usr,"Choose Energy Color") as color|null
-			if(energy_color_input)
-				energy_color = sanitize_hexcolor(energy_color_input, desired_format=6, include_crunch=1)
-				user.update_inv_wear_suit()
-				if(linkedhelm)
-					linkedhelm.energy_color = sanitize_hexcolor(energy_color_input, desired_format=6, include_crunch=1)
-					user.update_inv_head()
-					linkedhelm.update_icon()
-				update_icon()
-				user.update_inv_wear_suit()
-				light_color = energy_color
-				emissivelights()
-				update_light()
+/obj/item/clothing/suit/space/hardsuit/lavaknight/AltClick(mob/living/user)
+	if(user.incapacitated() || !istype(user))
+		to_chat(user, "<span class='warning'>You can't do that right now!</span>")
+		return
+	if(!in_range(src, user))
+		return
+	if(user.incapacitated() || !istype(user) || !in_range(src, user))
+		return
 
-	else
-		..()
+	if(alert("Are you sure you want to recolor your armor stripes?", "Confirm Repaint", "Yes", "No") == "Yes")
+		var/energy_color_input = input(usr,"Choose Energy Color") as color|null
+		if(energy_color_input)
+			energy_color = sanitize_hexcolor(energy_color_input, desired_format=6, include_crunch=1)
+			user.update_inv_wear_suit()
+			if(linkedhelm)
+				linkedhelm.energy_color = sanitize_hexcolor(energy_color_input, desired_format=6, include_crunch=1)
+				user.update_inv_head()
+				linkedhelm.update_icon()
+			update_icon()
+			user.update_inv_wear_suit()
+			light_color = energy_color
+			emissivelights()
+			update_light()
